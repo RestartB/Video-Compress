@@ -3,13 +3,7 @@
 declare global {
 	namespace App {
 		// interface Error {}
-		interface Locals {
-			token?: string;
-			discordToken?: string;
-			discordId?: string;
-			guildId?: string;
-			inGuild?: boolean;
-		}
+		// interface Locals {}
 		// interface PageData {}
 		// interface PageState {}
 		// interface Platform {}

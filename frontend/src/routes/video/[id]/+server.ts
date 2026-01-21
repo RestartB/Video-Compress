@@ -1,11 +1,7 @@
 import { error } from '@sveltejs/kit';
 import { client } from '$lib/server/redis';
 
-export async function GET({ params, locals }) {
-	if (!locals.token || !locals.inGuild) {
-		return error(403, 'Forbidden');
-	}
-
+export async function GET({ params }) {
 	const videoBuffer = await client.get(params.id);
 
 	if (!videoBuffer) {

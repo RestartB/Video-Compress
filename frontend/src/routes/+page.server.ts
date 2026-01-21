@@ -2,6 +2,8 @@ import { superValidate, fail, message } from 'sveltekit-superforms';
 import { zod4 } from 'sveltekit-superforms/adapters';
 import fileSchema from '$lib/schema/file';
 
+import { env } from '$env/dynamic/private';
+
 import type { Actions } from './$types';
 
 export const load = async () => {
@@ -15,6 +17,7 @@ export const actions = {
 		const form = await superValidate(request, zod4(fileSchema));
 
 		if (!form.valid) {
+			console.log(form.errors);
 			return fail(400, { form });
 		}
 
@@ -24,7 +27,7 @@ export const actions = {
 		formData.append('video', file, file.name);
 		formData.append('target', String(form.data.target));
 
-		const compressRequest = await fetch('http://127.0.0.1:5000/compress', {
+		const compressRequest = await fetch(`http://${env.BACKEND_HOST}:${env.BACKEND_PORT}/compress`, {
 			method: 'POST',
 			body: formData
 		});
