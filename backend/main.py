@@ -1,4 +1,4 @@
-from flask import request, Flask, jsonify
+from quart import request, Quart, jsonify
 import asyncio
 
 from pathlib import Path
@@ -12,7 +12,8 @@ import os
 
 
 def create_app():
-    app = Flask(__name__)
+    app = Quart(__name__)
+    app.config["MAX_CONTENT_LENGTH"] = 600 * 1024 * 1024
 
     r = aioredis.Redis(
         host=os.getenv("REDIS_HOST", "cache"),
@@ -22,7 +23,9 @@ def create_app():
 
     @app.route("/compress", methods=["POST"])
     async def compress():
-        file = request.files["video"]
+        files = await request.files
+        file = files["video"]
+        form = await request.form
 
         with tempfile.TemporaryDirectory() as temp_folder:
             temp_path = Path(temp_folder)
@@ -30,8 +33,7 @@ def create_app():
                 "input" + Path(file.filename or "input.mp4").suffix
             )
 
-            with open(input_file_path, "wb") as input_file:
-                file.save(input_file)
+            await file.save(input_file_path)
 
             # probe
             proc = await asyncio.create_subprocess_exec(
@@ -52,7 +54,7 @@ def create_app():
 
             duration = float((await proc.stdout.read()).decode())
 
-            target_size_mib = max(float(request.form["target"]) - 0.5, 0.1)
+            target_size_mib = max(float(form["target"]) - 0.5, 0.1)
             audio_bitrate = 128
             total_bitrate = (target_size_mib * 8388.608) / duration
             video_bitrate = int(total_bitrate - audio_bitrate)
@@ -128,4 +130,4 @@ if __name__ == "__main__":
     create = create_app()
     create.run()
 else:
-    gunicorn_app = create_app()
+    hypercorn_app = create_app()

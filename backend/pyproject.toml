@@ -4,7 +4,7 @@ version = "0.1.0"
 description = "Backend API for video compressor"
 requires-python = ">=3.14"
 dependencies = [
-    "flask[async]>=3.1.2",
-    "gunicorn>=23.0.0",
+    "hypercorn>=0.18.0",
+    "quart>=0.20.0",
     "redis>=7.1.0",
 ]

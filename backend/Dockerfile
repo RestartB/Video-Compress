@@ -15,4 +15,4 @@ RUN uv sync --locked
 COPY . .
 
 EXPOSE 4000
-CMD ["uv", "run", "gunicorn", "-w", "4", "-b", "0.0.0.0:4000", "main:gunicorn_app"]
+CMD ["uv", "run", "hypercorn", "-b", "0.0.0.0:4000", "main:hypercorn_app"]
