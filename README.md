@@ -1,6 +1,6 @@
 # Video Compress Server
 
-Basic video compressor powered by FFmpeg with target file size and Discord authentication.
+Basic video compressor powered by FFmpeg with web UI and target file size option.
 
 ## Setup
 
