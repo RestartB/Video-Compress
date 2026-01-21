@@ -14,7 +14,8 @@ export const load = async () => {
 
 export const actions = {
 	default: async ({ request, fetch }) => {
-		const form = await superValidate(request, zod4(fileSchema));
+		const formData = await request.formData();
+		const form = await superValidate(formData, zod4(fileSchema));
 
 		if (!form.valid) {
 			console.log(form.errors);
@@ -23,13 +24,13 @@ export const actions = {
 
 		const file = form.data.video;
 
-		const formData = new FormData();
-		formData.append('video', file, file.name);
-		formData.append('target', String(form.data.target));
+		const backendFormData = new FormData();
+		backendFormData.append('video', file, file.name);
+		backendFormData.append('target', String(form.data.target));
 
 		const compressRequest = await fetch(`http://${env.BACKEND_HOST}:${env.BACKEND_PORT}/compress`, {
 			method: 'POST',
-			body: formData
+			body: backendFormData
 		});
 
 		if (!compressRequest.ok) {

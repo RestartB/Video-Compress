@@ -30,7 +30,7 @@
 		});
 	}
 
-	const { form, errors, allErrors, delayed, message, enhance } = $derived(
+	const { form, errors, allErrors, submitting, delayed, message, enhance } = $derived(
 		superForm(data.form, {
 			validators: zod4Client(fileSchema),
 			onSubmit({ customRequest }) {
@@ -51,7 +51,7 @@
 
 	<label
 		class="flex cursor-pointer items-center justify-center gap-2 rounded-xl border-2 border-zinc-400 bg-zinc-100 p-2 px-4 transition-colors hover:bg-zinc-300 dark:border-zinc-600 dark:bg-zinc-700 dark:hover:bg-zinc-800"
-		for="file"><Video size={20} />Select video...</label
+		for="file"><Video size={20} class="shrink-0" />Select video...</label
 	>
 	<input
 		type="file"
@@ -69,7 +69,7 @@
 	{#if $errors.video}
 		{#each $errors.video as error}
 			<span class="flex items-center gap-2">
-				<CircleAlert />
+				<CircleAlert class="shrink-0" />
 				<p>{error}</p>
 			</span>
 		{/each}
@@ -93,7 +93,7 @@
 		{#if $errors.target}
 			{#each $errors.target as error}
 				<span class="flex items-center gap-2">
-					<CircleAlert />
+					<CircleAlert class="shrink-0" />
 					<p>{error}</p>
 				</span>
 			{/each}
@@ -105,11 +105,11 @@
 			disabled={$allErrors.length > 0 || !$form.target || $delayed}
 		>
 			{#if progress === 100}
-				<LoaderCircle class="animate-spin" /> Compressing... this may take a minute.
+				<LoaderCircle class="shrink-0 animate-spin" /> Compressing... this may take a minute.
 			{:else if $delayed}
-				<LoaderCircle class="animate-spin" /> Uploading...
+				<LoaderCircle class="shrink-0 animate-spin" /> Uploading...
 			{:else}
-				<Upload /> Upload and compress
+				<Upload class="shrink-0" /> Upload and compress
 			{/if}
 		</button>
 
@@ -128,7 +128,7 @@
 	</div>
 
 	<span class="flex items-center gap-2">
-		<CircleAlert />
+		<CircleAlert class="shrink-0" />
 		<p>
 			The compressed video will be available to download for a max of 15 minutes, after this or if
 			the video is downloaded it will be deleted
@@ -140,6 +140,6 @@
 		href="/video/{$message['file_id']}"
 		download
 	>
-		<Download /> Download
+		<Download class="shrink-0" /> Download
 	</a>
 {/if}
