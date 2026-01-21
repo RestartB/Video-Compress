@@ -1,12 +1,14 @@
+import { error } from '@sveltejs/kit';
+
 import { superValidate, fail, message } from 'sveltekit-superforms';
 import { zod4 } from 'sveltekit-superforms/adapters';
 import fileSchema from '$lib/schema/file';
 
 import { env } from '$env/dynamic/private';
 
-import type { Actions } from './$types';
+import type { PageServerLoad, Actions } from './$types';
 
-export const load = async () => {
+export const load: PageServerLoad = async () => {
 	return {
 		form: await superValidate(zod4(fileSchema))
 	};
@@ -35,7 +37,7 @@ export const actions = {
 
 		if (!compressRequest.ok) {
 			console.log(compressRequest.status, compressRequest.statusText);
-			return fail(500, { form });
+			return error(500);
 		}
 
 		const output = await compressRequest.json();

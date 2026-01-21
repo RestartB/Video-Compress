@@ -9,6 +9,11 @@ services:
     build:
       context: ./backend
       dockerfile: Dockerfile
+    deploy:
+      resources:
+        limits:
+          # number of cores to limit to
+          cpus: '6'
     restart: unless-stopped
     env_file:
       - .env

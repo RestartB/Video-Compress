@@ -20,6 +20,9 @@ def create_app():
         db=0,
     )
 
+    r.config_set("maxmemory", "8gb")
+    r.config_rewrite()
+
     @app.route("/compress", methods=["POST"])
     async def compress():
         file = request.files["video"]
